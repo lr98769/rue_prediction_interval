@@ -14,5 +14,6 @@ jupyterlab==3 # IDE
 jupyterlab-git==0.30 # Jupyter Lab Git extension
 wfdb # WaveForm-Database package. A library of tools for reading, writing, and processing WFDB signals and annotations.
 tqdm # Progress bar
+wordcloud # To explore alarm types
 
 
