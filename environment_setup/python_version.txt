@@ -1,0 +1,1 @@
+conda create -n icu python=3.10
