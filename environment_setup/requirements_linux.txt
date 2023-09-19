@@ -17,3 +17,4 @@ wordcloud # To explore alarm types
 tensorflow-determinism # For reproducibility
 imblearn # Balance classes
 seaborn #Visualisation
+shap
