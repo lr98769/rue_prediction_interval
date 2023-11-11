@@ -19,3 +19,5 @@ tensorflow-determinism # For reproducibility
 imblearn # Balance classes
 seaborn #Visualisation
 gpflow #gpr
+plotly # Visualisation
+kaleido # Output plotly graphs
