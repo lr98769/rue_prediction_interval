@@ -77,3 +77,29 @@
 2023,Predicting with DER,0.01270437240600586
 2023,Predicting with DER,0.007474184036254883
 2023,Predicting with DER,0.009248018264770508
+2023,Predicting with Infer-Noise,0.06609845161437988
+2023,Predicting with Infer-Noise,0.08025574684143066
+2023,Predicting with Infer-Noise,0.06435418128967285
+2023,Predicting with Infer-Noise,0.0767819881439209
+2023,Predicting with Infer-Noise,0.06441497802734375
+2023,Predicting with Infer-Noise,0.07791018486022949
+2023,Predicting with Infer-Noise,0.06468582153320312
+2023,Predicting with Infer-Noise,0.07587623596191406
+2023,Predicting with Decoder + Predictor,0.009669780731201172
+2023,Predicting with MC Dropout,0.04574179649353027
+2023,Predicting with Decoder + Predictor,0.010782718658447266
+2023,Predicting with MC Dropout,0.05067801475524902
+2023,Predicting with Decoder + Predictor,0.010506629943847656
+2023,Predicting with MC Dropout,0.04476642608642578
+2023,Predicting with Decoder + Predictor,0.010745763778686523
+2023,Predicting with MC Dropout,0.05030179023742676
+2023,Predicting with Decoder + Predictor,0.009380817413330078
+2023,Predicting with MC Dropout,0.04466533660888672
+2023,Predicting with Decoder + Predictor,0.010007143020629883
+2023,Predicting with MC Dropout,0.048920631408691406
+2023,Predicting with Infer-Noise,0.04184865951538086
+2023,Predicting with Infer-Noise,0.044423580169677734
+2023,Predicting with Infer-Noise,0.042171478271484375
+2023,Predicting with Infer-Noise,0.05239152908325195
+2023,Predicting with Infer-Noise,0.04202628135681152
+2023,Predicting with Infer-Noise,0.0439610481262207
