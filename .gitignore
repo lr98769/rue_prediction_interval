@@ -1,2 +1,3 @@
 notebooks/reference_code/*
 notebooks/overnight_code/*
+checkpoints/mimic/pi_predictions/*/df_dict.joblib
