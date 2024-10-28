@@ -1,17 +1,17 @@
 Category,Operation,Time/s
-PI,Conformal PI,0.0006004387224223718
-PI,Conditional PI,0.004660944143931009
-PI,KNN PI,0.009398698806762633
-PI,Copula PI,0.03561802705128984
-PI,Weighted PI,0.10064049561818435
+PI,Conformal PI,0.0005909115710156521
+PI,Conditional PI,0.003673661838878224
+PI,KNN PI,0.009416341781616157
+PI,Copula PI,0.0314925656174168
+PI,Weighted PI,0.10050452839244492
 Predicting,Predicting with DER,0.002333064874013221
 Predicting,Predicting with Decoder + Predictor,0.0099252859751383
 Predicting,Predicting with GPR,0.028448641300201364
 Predicting,Predicting with Infer-Noise,0.031605154275894116
 Predicting,Predicting with MC Dropout,0.05196566383043919
-Predicting,Predicting with BNN,7.870606203873952
+Predicting,Predicting with BNN,7.784830212593079
 Training,Training Encoder and Predictor,7.658442715803782
 Training,Training Decoder,10.645309249560038
-Training,Training BNN,49.06492135922114
 Training,Training GPR,88.4711547891299
 Training,Training DER,149.62200274070105
+Training,Training BNN,1329.463078435262
