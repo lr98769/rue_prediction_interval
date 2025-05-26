@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from IPython.display import display
 
-from src.display.highlight_df import highlight_first_n_second_lowest, highlight_first_n_second_highest
+from src.df_display.highlight_df import highlight_first_n_second_lowest, highlight_first_n_second_highest
 
 
 def calculate_picp_for_a_feature(actual, lb, ub):

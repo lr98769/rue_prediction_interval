@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.metrics import mean_squared_error
 from IPython.display import display
 
-from src.display.highlight_df import highlight_first_n_second_lowest
+from src.df_display.highlight_df import highlight_first_n_second_lowest
 
 def get_prediction_performance_table(test_df_dict, ue_dict):
     perf_df_dict = []

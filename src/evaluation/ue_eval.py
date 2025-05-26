@@ -4,7 +4,7 @@ from sklearn.metrics import auc
 import numpy as np
 from IPython.display import display
 
-from src.display.highlight_df import highlight_first_n_second_lowest, highlight_first_n_second_highest
+from src.df_display.highlight_df import highlight_first_n_second_lowest, highlight_first_n_second_highest
 
 def calculate_aurc(ue, loss):
     num_samples = len(ue)
@@ -71,15 +71,27 @@ def get_ue_performance_table(test_df_dict, ue_dict):
     perf_df = perf_df.set_index("Model")
     return perf_df
 
+def restructure_ue_df(ue_perf_df):
+    ue_perf_df = ue_perf_df.copy()
+    # Split df into time label
+    num_time, num_metrics = 3, 7
+    all_dfs = []
+    for i in range(num_time):
+        column_indices = list(range(i*num_metrics, (i+1)*num_metrics))
+        cur_df = ue_perf_df.iloc[:,column_indices]
+        cur_df.columns = cur_df.columns.str.split(" ").str[-1] # remove time label from column names
+        cur_df.loc[:,"Time Horizon"] = f"t+{i+1}"
+        all_dfs.append(cur_df)
+    all_dfs = pd.concat(all_dfs)
+    all_dfs = all_dfs.reset_index().set_index(["Time Horizon", "Model"])
+    return all_dfs
+
 def display_ue_perf(ue_perf_df, consolidated=False):
     ue_perf_df = ue_perf_df.copy()
     # Split df into time label
     num_time, num_metrics = 3, 7
-    for i in range(num_time):
-        print(f"t+{i}:")
-        column_indices = list(range(i*num_metrics, (i+1)*num_metrics))
-        cur_df = ue_perf_df.iloc[:,column_indices]
-        cur_df.columns = cur_df.columns.str.split(" ").str[-1] # remove time label from column names
+    for time_horizon, cur_df in ue_perf_df.groupby(level="Time Horizon"):
+        print(time_horizon)
         display(
             cur_df.style.apply(
                 highlight_first_n_second_highest, subset=cur_df.columns[0], split=consolidated).apply(
