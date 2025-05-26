@@ -93,10 +93,11 @@ def get_pi_performance_table(df_dict, pi_dict):
                 "CWFDC":cwfdc
             })
     output_df = pd.DataFrame(output_df_list)
+    output_df = output_df.set_index(["Time Horizon", "Method"])
     return output_df
 
 def display_pi_perf(
-    pi_perf_df, highest_cols=["PICP"], lowest_cols=["PINAW", "PINAFD", "CovP"], consolidated=False):
+    pi_perf_df, highest_cols=["PICP"], lowest_cols=["PINAW", "PINAFD", "CovP", "CWFDC"], consolidated=False):
     pi_perf_df = pi_perf_df.copy()
     # Split df into time label
     num_time, num_metrics = 3, 7

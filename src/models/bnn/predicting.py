@@ -23,12 +23,11 @@ def predict_bnn_model(bnn_model, dl, feat_cols, target_cols, seed, silent):
             all_pred.append(pred.detach().cpu())
     return torch.cat(all_pred)
 
-
 def mae_fn(y_true, y_pred):
     return np.mean(np.abs(y_true-y_pred), axis=-1)
 
-
-def bnn_model_prediction(bnn_model, test_df, feat_cols, target_cols, T, seed,  regressor_label, batch_size):
+def bnn_model_prediction(
+    bnn_model, test_df, feat_cols, target_cols, T, seed,  regressor_label, batch_size):
     test_df = test_df.copy()
     set_seed_pytorch(seed)
     # Prepare dataset
