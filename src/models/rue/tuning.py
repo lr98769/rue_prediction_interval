@@ -1,5 +1,5 @@
 import numpy as np
-from src.models.misc import set_seed
+from src.misc import set_seed
 from src.models.rue.model import AE_Regressor, get_model_error_corr
 
 
