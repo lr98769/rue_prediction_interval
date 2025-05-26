@@ -56,7 +56,7 @@ def train_der_w_param(
     )
     early_stopping = EarlyStopping('val/MSE', patience=patience, verbose=True, mode='min')
 
-    trainer = Trainer(accelerator="gpu", devices=2, max_epochs=max_epochs, enable_progress_bar=True, callbacks=[early_stopping])
+    trainer = Trainer(accelerator="gpu", devices=1, max_epochs=max_epochs, enable_progress_bar=True, callbacks=[early_stopping])
     with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
         trainer.fit(model=routine, datamodule=datamodule)
         result = trainer.test(model=routine, datamodule=datamodule)

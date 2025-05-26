@@ -1,6 +1,8 @@
 import numpy as np
 
-def conformal_prediction_interval(df_val, df_test, scaler, predictors, pred_cols, pred_label, regressor_label, ue_col, alpha=0.05, seed=seed):
+def conformal_prediction_interval(
+    df_val, df_test, scaler, predictors, pred_cols, pred_label, regressor_label, ue_col, 
+    seed, alpha=0.05):
     pi_label = "_conformal"
     df_val, df_test = df_val.copy(), df_test.copy()
     unscaled_cols = [col+"_unscaled" for col in pred_cols]

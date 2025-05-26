@@ -50,24 +50,24 @@ def load_prediction_df_dict(
     return df_dict
 
 # Save all predictions
-def save_df_dict(df_dict, fp_cur_pi_prediction_folder):
+def save_pi_df_dict(df_dict, fp_cur_pi_predictions_folder):
     for time_label, time_info in tqdm(df_dict.items()):
-        create_folder(fp_cur_pi_prediction_folder)
+        create_folder(fp_cur_pi_predictions_folder)
         val_df, test_df, pred_cols = time_info["valid_df"], time_info["test_df"], time_info["pred_cols"]
-        val_df.to_csv(join(fp_cur_pi_prediction_folder, "val_"+time_label+".csv"))
-        test_df.to_csv(join(fp_cur_pi_prediction_folder, "test_"+time_label+".csv"))
-        joblib.dump(pred_cols, join(fp_cur_pi_prediction_folder, "pred_cols_"+time_label+".joblib"))
+        val_df.to_csv(join(fp_cur_pi_predictions_folder, "val_"+time_label+".csv"))
+        test_df.to_csv(join(fp_cur_pi_predictions_folder, "test_"+time_label+".csv"))
+        joblib.dump(pred_cols, join(fp_cur_pi_predictions_folder, "pred_cols_"+time_label+".joblib"))
     print("Saved df_dict!")
 
 # Load all predictions
-def load_df_dict(fp_cur_pi_prediction_folder, time_labels=["t+1", "t+2", "t+3"]):
+def load_pi_df_dict(fp_cur_pi_predictions_folder, time_labels=["t+1", "t+2", "t+3"]):
     df_dict = {}
     for time_label in tqdm(time_labels):
-        val_df = pd.read_csv(join(fp_cur_pi_prediction_folder, "val_"+time_label+".csv"), index_col=0)
+        val_df = pd.read_csv(join(fp_cur_pi_predictions_folder, "val_"+time_label+".csv"), index_col=0)
         val_df = val_df.loc[:, ~val_df.columns.str.contains('^Unnamed')]
-        test_df = pd.read_csv(join(fp_cur_pi_prediction_folder, "test_"+time_label+".csv"), index_col=0)
+        test_df = pd.read_csv(join(fp_cur_pi_predictions_folder, "test_"+time_label+".csv"), index_col=0)
         test_df = test_df.loc[:, ~test_df.columns.str.contains('^Unnamed')]
-        pred_cols = joblib.load(join(fp_cur_pi_prediction_folder, "pred_cols_"+time_label+".joblib"))
+        pred_cols = joblib.load(join(fp_cur_pi_predictions_folder, "pred_cols_"+time_label+".joblib"))
         df_dict[time_label] = {"valid_df": val_df, "test_df": test_df, "pred_cols":pred_cols}
     print("Loaded df_dict!")
     return df_dict
