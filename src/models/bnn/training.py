@@ -73,9 +73,12 @@ def train_bnn_model(
     return best_val_loss, best_epoch
 
 
-def train_model_w_best_param(best_param, train_df, valid_df, feat_cols, target_cols, epochs, patience, seed, fp_model):
+def train_model_w_best_param(
+    best_param, train_df, valid_df, feat_cols, target_cols, epochs, patience, seed, batch_size, fp_model):
     bnn_model =  instantiate_bnn_model(seed=seed, num_inputs=len(feat_cols), num_outputs=len(target_cols), **best_param)
-    train_bnn_model(bnn_model, train_df, valid_df, feat_cols, target_cols, epochs, patience, seed, fp_model)
+    train_bnn_model(
+        bnn_model, train_df, valid_df, feat_cols, target_cols, epochs, patience, 
+        seed, batch_size, fp_model)
     return torch.load(fp_model)
 
 def evaluate_bnn_perf(df, feat_cols, target_cols, pred):
