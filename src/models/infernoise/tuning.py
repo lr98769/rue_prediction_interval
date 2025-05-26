@@ -19,5 +19,3 @@ def tune_infernoise(ae_predictor, stddev_list, valid_df, inputs, outputs, seed, 
     best_index = tuning_df["loss"].idxmin()
     tuning_df.iloc[best_index, -1] = True
     return tuning_df
-
-

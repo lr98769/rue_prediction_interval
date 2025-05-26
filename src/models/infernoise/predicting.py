@@ -1,4 +1,3 @@
-from src.models.infernoise.tuning import mae_fn
 from src.models.misc import set_seed
 
 import numpy as np
@@ -46,3 +45,7 @@ def infernoise_test_predictions(ae_predictor, test_df, inputs, outputs, seed, T,
     test_df["infernoise_uncertainty"] = test_y_sd_pred
 
     return test_df
+
+
+def mae_fn(y_true, y_pred):
+    return np.mean(np.abs(y_true-y_pred), axis=-1)
