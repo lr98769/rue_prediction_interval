@@ -39,3 +39,8 @@ pi_dict = {
         "pred_label": "_der", "ue_col": "der_uncertainty", "pi_label": "_conformal"
     },
 }   
+
+pi_order = [
+    "RUE Gaussian Copula", "RUE KNN", "RUE Conditional Gaussian", "RUE Weighted", 
+    "RUE Conformal", "Infer-Noise Conformal", "MC Dropout Conformal", 
+    "GPR Conformal", "BNN Conformal", "DER Conformal"]

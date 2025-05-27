@@ -54,12 +54,17 @@ def consolidate_ue_perf(seed_list, fp_evaluation, exclude_columns=None):
         output_df = output_df.drop(columns=exclude_columns)
     return output_df
     
-def consolidate_pi_perf(seed_list, fp_evaluation, exclude_columns=None):
+def consolidate_pi_perf(seed_list, fp_evaluation, selected_columns=None, pi_order=None):
     output_df = get_mean_std_of_all_seed_csvs(
         seed_list, fp_evaluation, filename="pi_perf.csv", 
         reindex=["Time Horizon","Method"], sp=5)
-    if exclude_columns is not None:
-        output_df = output_df.drop(columns=exclude_columns)
+    if selected_columns is not None:
+        output_df = output_df[selected_columns]
+    if pi_order is not None:
+        new_output_df = []
+        for time, df in output_df.groupby(level="Time Horizon"):
+            new_output_df.append(df.loc[(time, pi_order), :])
+        output_df = pd.concat(new_output_df)
     return output_df
 
 
