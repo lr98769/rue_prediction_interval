@@ -3,7 +3,7 @@ ue_dict = {
     "MC Dropout": {"pred_label": "_mean", "ue_col": "mcd", },
     "GPR": {"pred_label": "_gpr", "ue_col": "gpr_std_mean", },
     "Infer-Noise": {"pred_label": "_infernoise", "ue_col": "infernoise_uncertainty", },
-    # "BNN": {"pred_label": "_bnn", "ue_col": "bnn_uncertainty", },
+    "BNN": {"pred_label": "_bnn", "ue_col": "bnn_uncertainty", },
     "DER": {"pred_label": "_der", "ue_col": "der_uncertainty", }
 }   
 
@@ -32,9 +32,9 @@ pi_dict = {
     "GPR Conformal": {
         "pred_label": "_gpr", "ue_col": "gpr_std_mean", "pi_label": "_conformal"
     },
-    # "BNN Conformal": {
-    #     "pred_label": "_bnn", "ue_col": "bnn_uncertainty", "pi_label": "_conformal"
-    # },
+    "BNN Conformal": {
+        "pred_label": "_bnn", "ue_col": "bnn_uncertainty", "pi_label": "_conformal"
+    },
     "DER Conformal": {
         "pred_label": "_der", "ue_col": "der_uncertainty", "pi_label": "_conformal"
     },

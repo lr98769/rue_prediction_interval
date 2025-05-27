@@ -74,7 +74,14 @@ def aggregate_metrics_across_feats(df_info, pi_info, time_label, metric_func):
     av_metric = total_metric/num_feat
     return av_metric
 
-def get_pi_performance_table(df_dict, pi_dict):
+def min_max_norm_cols(df, cols):
+    df = df.copy()
+    for col in cols:
+        col_min, col_max = df[col].min(), df[col].max()
+        df[col] = (df[col]-col_min)/(col_max-col_min)
+    return df
+
+def get_pi_performance_table(df_dict, pi_dict, minmax=False):
     output_df_list = []
     for time_label, df_info in df_dict.items():
         for pi_label, pi_info in pi_dict.items():
@@ -94,11 +101,16 @@ def get_pi_performance_table(df_dict, pi_dict):
             })
     output_df = pd.DataFrame(output_df_list)
     output_df = output_df.set_index(["Time Horizon", "Method"])
+    if minmax:
+        output_df = min_max_norm_cols(output_df, cols=["CovP", "PINAW", "PINAFD"])
+        output_df["AvgP"] = output_df[["CovP", "PINAW", "PINAFD"]].mean(axis=1)
     return output_df
 
 def display_pi_perf(
-    pi_perf_df, highest_cols=["PICP"], lowest_cols=["PINAW", "PINAFD", "CovP", "CWFDC"], consolidated=False):
+    pi_perf_df, highest_cols=["PICP"], lowest_cols=["PINAW", "PINAFD", "CovP", "CWFDC", "AvgP"], consolidated=False):
     pi_perf_df = pi_perf_df.copy()
+    highest_cols = [col for col in highest_cols if col in pi_perf_df.columns]
+    lowest_cols = [col for col in lowest_cols if col in pi_perf_df.columns]
     # Split df into time label
     num_time, num_metrics = 3, 7
     for time_horizen, cur_df in pi_perf_df.groupby(level="Time Horizon"):

@@ -46,14 +46,21 @@ def consolidate_pred_perf(seed_list, fp_evaluation):
     return get_mean_std_of_all_seed_csvs(
         seed_list, fp_evaluation, filename="pred_perf.csv", sp=4)
     
-def consolidate_ue_perf(seed_list, fp_evaluation):
-    return get_mean_std_of_all_seed_csvs(
-        seed_list, fp_evaluation, filename="ue_perf.csv", sp=3)
+def consolidate_ue_perf(seed_list, fp_evaluation, exclude_columns=None):
+    output_df = get_mean_std_of_all_seed_csvs(
+        seed_list, fp_evaluation, filename="ue_perf.csv", 
+        reindex=["Time Horizon","Model"], sp=3)
+    if exclude_columns is not None:
+        output_df = output_df.drop(columns=exclude_columns)
+    return output_df
     
-def consolidate_pi_perf(seed_list, fp_evaluation):
-    return get_mean_std_of_all_seed_csvs(
+def consolidate_pi_perf(seed_list, fp_evaluation, exclude_columns=None):
+    output_df = get_mean_std_of_all_seed_csvs(
         seed_list, fp_evaluation, filename="pi_perf.csv", 
         reindex=["Time Horizon","Method"], sp=5)
+    if exclude_columns is not None:
+        output_df = output_df.drop(columns=exclude_columns)
+    return output_df
 
 
     

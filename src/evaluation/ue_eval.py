@@ -6,6 +6,11 @@ from IPython.display import display
 
 from src.df_display.highlight_df import highlight_first_n_second_lowest, highlight_first_n_second_highest
 
+import warnings
+from pandas.errors import SettingWithCopyWarning
+
+warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
+
 def calculate_aurc(ue, loss):
     num_samples = len(ue)
     ue_loss_df = pd.DataFrame({"ue":ue, "loss":loss})
@@ -95,7 +100,7 @@ def display_ue_perf(ue_perf_df, consolidated=False):
         display(
             cur_df.style.apply(
                 highlight_first_n_second_highest, subset=cur_df.columns[0], split=consolidated).apply(
-                    highlight_first_n_second_lowest, subset=cur_df.columns[2:], split=consolidated
+                    highlight_first_n_second_lowest, subset=cur_df.columns[1:], split=consolidated
                 )
         )
 
