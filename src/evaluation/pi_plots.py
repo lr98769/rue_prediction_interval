@@ -52,7 +52,7 @@ def plot_predictions_with_pi_across_methods(
             # print(pred_col)
             y_pred_col = pred_col+pred_label+"_"+regressor_label
 
-            index = test_record_df[time_col+"_"+regressor_label]
+            index = test_record_df[time_col]
             y_true = test_record_df[pred_col+"_unscaled"].values
             y_pred = test_record_df[y_pred_col+"_unscaled"].values
             pi = test_record_df[pred_col+"_"+ue_col+pi_label].values
