@@ -41,7 +41,6 @@ def underline_second_best(s, direction):
             output.append(ori_v)
     return output
 
-
 def df_to_latex(df, column_format_dict):
     df = df.copy()
     for col, direction in column_format_dict.items():

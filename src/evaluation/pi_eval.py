@@ -3,7 +3,7 @@ import numpy as np
 from IPython.display import display
 
 from src.df_display.highlight_df import highlight_first_n_second_lowest, highlight_first_n_second_highest
-
+from src.evaluation.consolidate import get_mean_of_all_seed_csvs
 
 def calculate_picp_for_a_feature(actual, lb, ub):
     # PICP (Prediction interval coverage probability)
@@ -60,16 +60,16 @@ def calculate_cwfdc_for_a_feature(actual, lb, ub):
 def aggregate_metrics_across_feats(df_info, pi_info, time_label, metric_func):
     total_metric = 0
     pred_cols, df_test = df_info["pred_cols"], df_info["test_df"]
-    pred_label, ue_col,  pi_label = pi_info["pred_label"], pi_info["ue_col"], pi_info["pi_label"]
+    ue_col,  pi_label = pi_info["ue_col"], pi_info["pi_label"]
     num_feat = len(pred_cols)
     for pred_col in pred_cols:
-        pi_col = f"{pred_col}_{ue_col}{pi_label}"
-        predicted_col = f"{pred_col}{pred_label}_{time_label}_unscaled"
-        pi, pred = df_test[pi_col], df_test[predicted_col]
+        lb_col = f"{pred_col}_{ue_col}{pi_label}_lb_unscaled"
+        ub_col = f"{pred_col}_{ue_col}{pi_label}_ub_unscaled"
+        lb, ub = df_test[lb_col], df_test[ub_col]
         total_metric += metric_func(
             actual=df_test[pred_col+"_unscaled"], 
-            lb=pred-pi, 
-            ub=pred+pi
+            lb=lb, 
+            ub=ub
         )
     av_metric = total_metric/num_feat
     return av_metric
@@ -121,3 +121,33 @@ def display_pi_perf(
                     highlight_first_n_second_lowest, subset=lowest_cols, split=consolidated
                 )
         )
+        
+def reorganise_pi_table(seed_list, fp_evaluation, pi_order, selected_columns=None):
+    pi_perf_df = get_mean_of_all_seed_csvs(
+        seed_list, fp_evaluation, filename="pi_perf.csv", reindex=["Time Horizon","Method"])
+    if selected_columns is not None:
+        pi_perf_df = pi_perf_df[selected_columns]
+    pi_perf_df = pi_perf_df.copy()
+    metrics = pi_perf_df.columns
+    
+    pi_perf_df = pi_perf_df.reset_index()
+    times = pi_perf_df["Time Horizon"].unique().tolist()
+    
+    new_cols = [f"{metric}\n{time}" for metric in metrics for time in times+["Avg"]]
+    all_rows = []
+    all_methods = []
+    for method, method_df in pi_perf_df.groupby("Method"):
+        cur_row = []
+        for metric in metrics:
+            cur_row += method_df[metric].tolist()+[method_df[metric].mean()]
+        all_rows.append(cur_row)
+        all_methods.append(method)
+    return_df = pd.DataFrame(all_rows, columns=new_cols, index=all_methods)
+    if pi_order is not None:
+        return_df = return_df.loc[pi_order, :]
+    return return_df
+        
+def display_pi_perf_reorganised(pi_perf_df_reorganised):
+    return pi_perf_df_reorganised.style.apply(
+        highlight_first_n_second_lowest, split=False
+    )

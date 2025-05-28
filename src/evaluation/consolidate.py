@@ -30,11 +30,14 @@ def get_mean_std_of_all_seed_csvs(seed_list, fp_folder, filename, sp=3, reindex=
         combine_mean_n_std_matrices(combined_mean, combined_std, sp=sp), 
         index=df.index, columns=df.columns)
 
-def get_mean_of_all_seed_csvs(seed_list, fp_folder, filename):
+def get_mean_of_all_seed_csvs(seed_list, fp_folder, filename, reindex):
     result_list = []
     for cur_seed in seed_list:
         fp_perf = join(fp_folder, str(cur_seed), filename)
         df = pd.read_csv(fp_perf, index_col=0)
+        if reindex is not None:
+            df = df.reset_index()
+            df = df.set_index(reindex)
         result_list.append(df.values)
     results = np.array(result_list)
     combined_mean = np.mean(results, axis=0)

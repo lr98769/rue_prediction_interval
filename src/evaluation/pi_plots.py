@@ -10,7 +10,7 @@ def plot_predictions_with_pi_across_methods(
     fp_cur_evaluation_folder, record,
     num_cols = 5, display_feature="ABPsys (mmHg)", regressor_label="t+3",
     dpi=300, save_fig=False, ylim=None, record_col="record_id",
-    time_col="time"
+    time_col="time", pi_order=None
     ):
     fp_fig_folder = join(fp_cur_evaluation_folder, "pi_line_graphs")
     create_folder(fp_fig_folder)
@@ -26,8 +26,12 @@ def plot_predictions_with_pi_across_methods(
     if num_rows > 1:
         axes = axes.flatten()
         
+    if pi_order is None:
+        pi_order = pi_dict.keys()
+        
     # Plots in multiples of three
-    for i, (pi_name, pi_info) in enumerate(pi_dict.items()):
+    for i, pi_name in enumerate(pi_order):
+        pi_info = pi_dict[pi_name]
         ax = axes[i]
         # print(pi_name, ":")
         pred_label, ue_col, pi_label = pi_info["pred_label"], pi_info["ue_col"], pi_info["pi_label"]
@@ -55,14 +59,15 @@ def plot_predictions_with_pi_across_methods(
             index = test_record_df[time_col]
             y_true = test_record_df[pred_col+"_unscaled"].values
             y_pred = test_record_df[y_pred_col+"_unscaled"].values
-            pi = test_record_df[pred_col+"_"+ue_col+pi_label].values
+            lb = test_record_df[pred_col+"_"+ue_col+pi_label+"_lb_unscaled"].values
+            ub = test_record_df[pred_col+"_"+ue_col+pi_label+"_ub_unscaled"].values
             
             # Plot predictions and their CI
             ax.plot(index, y_true, color="blue")
             ax.plot(index, y_pred, color="red", alpha=0.8)
             ax.fill_between(
-                index, (y_pred-pi), (y_pred+pi), 
-                color='red', alpha=0.3
+                index, lb, ub, 
+                color='red', alpha=0.3, linewidth=0
             )  
             if i%num_cols==0:
                 ax.set_ylabel(feature)

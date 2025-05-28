@@ -18,6 +18,7 @@ def conformal_prediction_interval(
         # Get error for each variable
         val_y = df_val[col+"_unscaled"].values.astype('float32')
         val_y_pred = df_val[col+pred_label+"_"+regressor_label+"_unscaled"].values.astype('float32')
+        test_y_pred = df_test[col+pred_label+"_"+regressor_label+"_unscaled"].values.astype('float32')
         val_error = np.abs(val_y-val_y_pred)
     
         # Get uncertainty 
@@ -34,6 +35,9 @@ def conformal_prediction_interval(
         test_ue = df_test[ue_col].astype('float32')
 
         # Caclulate PI
-        df_test[col+"_"+ue_col+pi_label] = test_ue*qhat
+        pi = test_ue*qhat
+        
+        df_test[col+"_"+ue_col+pi_label+"_lb_unscaled"] = test_y_pred-pi
+        df_test[col+"_"+ue_col+pi_label+"_ub_unscaled"] = test_y_pred+pi
     
     return df_test
