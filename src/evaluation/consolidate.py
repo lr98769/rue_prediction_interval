@@ -29,6 +29,22 @@ def get_mean_std_of_all_seed_csvs(seed_list, fp_folder, filename, sp=3, reindex=
     return pd.DataFrame(
         combine_mean_n_std_matrices(combined_mean, combined_std, sp=sp), 
         index=df.index, columns=df.columns)
+    
+def get_mean_std_of_all_seed_csvs_one_column(seed_list, fp_folder, filename, sp=3, reindex=None):
+    result_list = []
+    for cur_seed in seed_list:
+        fp_perf = join(fp_folder, str(cur_seed), filename)
+        df = pd.read_csv(fp_perf, index_col=0)
+        if reindex is not None:
+            df = df.reset_index()
+            df = df.set_index(reindex)
+        result_list.append(df.mean(axis=1).values[:, None])
+    results = np.array(result_list)
+    combined_mean = np.mean(results, axis=0)
+    combined_std = np.std(results, axis=0)
+    return pd.DataFrame(
+        combine_mean_n_std_matrices(combined_mean, combined_std, sp=sp), 
+        index=df.index, columns=["Aggregated"])
 
 def get_mean_of_all_seed_csvs(seed_list, fp_folder, filename, reindex):
     result_list = []
@@ -45,9 +61,13 @@ def get_mean_of_all_seed_csvs(seed_list, fp_folder, filename, reindex):
         combined_mean, 
         index=df.index, columns=df.columns)
     
-def consolidate_pred_perf(seed_list, fp_evaluation):
-    return get_mean_std_of_all_seed_csvs(
-        seed_list, fp_evaluation, filename="pred_perf.csv", sp=4)
+def consolidate_pred_perf(seed_list, fp_evaluation, one_col=False):
+    if one_col:
+        return get_mean_std_of_all_seed_csvs_one_column(
+            seed_list, fp_evaluation, filename="pred_perf.csv", sp=4)
+    else:
+        return get_mean_std_of_all_seed_csvs(
+            seed_list, fp_evaluation, filename="pred_perf.csv", sp=4)
     
 def consolidate_ue_perf(seed_list, fp_evaluation, exclude_columns=None):
     output_df = get_mean_std_of_all_seed_csvs(

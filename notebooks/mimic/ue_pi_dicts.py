@@ -8,10 +8,10 @@ ue_dict = {
 }   
 
 pi_dict = {
-    "RUE Gaussian Copula": {
+    "RUE Gauss Copula": {
         "pred_label": "_direct", "ue_col": "rue", "pi_label": "_gauss_copula"
     },
-    "RUE Conditional Gaussian": {
+    "RUE Cond Gauss": {
         "pred_label": "_direct", "ue_col": "rue", "pi_label": "_cond_gauss"
     },
     "RUE Weighted": {
@@ -20,27 +20,26 @@ pi_dict = {
     "RUE KNN": {
         "pred_label": "_direct", "ue_col": "rue", "pi_label": "_knn"
     },
-    "RUE Conformal": {
+    "RUE CP": {
         "pred_label": "_direct", "ue_col": "rue", "pi_label": "_conformal"
     },
-    "Infer-Noise Conformal": {
+    "IN CP": {
         "pred_label": "_infernoise", "ue_col": "infernoise_uncertainty", "pi_label": "_conformal"
     },
-    "MC Dropout Conformal": {
+    "MCD CP": {
         "pred_label": "_mean", "ue_col": "mcd", "pi_label": "_conformal"
     },
-    "GPR Conformal": {
+    "GPR CP": {
         "pred_label": "_gpr", "ue_col": "gpr_std_mean", "pi_label": "_conformal"
     },
-    "BNN Conformal": {
+    "BNN CP": {
         "pred_label": "_bnn", "ue_col": "bnn_uncertainty", "pi_label": "_conformal"
     },
-    "DER Conformal": {
+    "DER CP": {
         "pred_label": "_der", "ue_col": "der_uncertainty", "pi_label": "_conformal"
     },
 }   
 
 pi_order = [
-    "RUE Gaussian Copula", "RUE KNN", "RUE Conditional Gaussian", "RUE Weighted", 
-    "RUE Conformal", "Infer-Noise Conformal", "MC Dropout Conformal", 
-    "GPR Conformal", "BNN Conformal", "DER Conformal"]
+    "RUE Gauss Copula", "RUE KNN", "RUE Cond Gauss", "RUE Weighted", 
+    "RUE CP", "IN CP", "MCD CP", "GPR CP", "BNN CP", "DER CP"]

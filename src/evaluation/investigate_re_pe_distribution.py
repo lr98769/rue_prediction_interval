@@ -18,19 +18,23 @@ def check_inter_point_distance(re):
     return pdist(re).mean()
 
 def check_distance_meaningfulness(re, pe):
+    sigma = 10
     # Justify weighted
+    n_feat = re.shape[-1]
     re_scaler = StandardScaler()
     pca = PCA(whiten=True)
     re = re_scaler.fit_transform(re)
     re = pca.fit_transform(re)
-    re_dist = squareform(pdist(re))
-    all_corr = []
+    re_dist = squareform(pdist(re))/np.sqrt(n_feat)
+    re_weight = np.exp(-np.square(re_dist)/(2*sigma**2))
+    all_corr, all_pval = [], []
     for i in range(pe.shape[1]):
         cur_pe = pe[:, i]
         pe_dist = np.abs(cur_pe[:, None] - cur_pe[None, :])
-        corr = pearsonr(re_dist.flatten(), pe_dist.flatten()).statistic
-        all_corr.append(corr)
-    return np.array(all_corr).mean()
+        res = pearsonr(re_weight.flatten(), pe_dist.flatten())
+        all_corr.append(res.statistic)
+        all_pval.append(res.pvalue)
+    return np.array(all_corr).mean(), combine_pvalues(all_pval).pvalue
 
 def check_marginals_are_gaussian(re, pe):
     # Justify Gaussian
@@ -60,7 +64,9 @@ def investigate_re_n_pe(pred_df_dict, split_dict, pred_label="_direct"):
                 re = np.abs(df[predictors].values - df[reconstruction_cols].values)
                 pe = np.abs(df[actual_cols].values-df[pred_cols].values)
                 cur_dict["dist\n"+name] = check_inter_point_distance(re)
-                cur_dict["dist meaning\n"+name] = check_distance_meaningfulness(re, pe)
+                stat, pval = check_distance_meaningfulness(re, pe)
+                cur_dict["dist meaning stat\n"+name] = stat
+                cur_dict["dist meaning pval\n"+name] = pval
                 cur_dict["marginal gauss\n"+name] = check_marginals_are_gaussian(re, pe)
                 hz, pval = check_multivariate_normality(re, pe)
                 cur_dict["normality pval "+name] = pval

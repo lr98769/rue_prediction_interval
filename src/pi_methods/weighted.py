@@ -43,8 +43,8 @@ def weighted_prediction_interval(
     mahalanobis_dist, ind = kdtree.query(test_re, k=k, workers=-1, p=2)
     dist = mahalanobis_dist/np.sqrt(n_feat) # already sorted by distance (nearest first; ascending order of distance)
     weights = np.exp(-np.square(dist)/(2*sigma**2)) # descending order of weights
-    print(np.sum(np.sum(weights, axis=1)==0))
-    print(np.mean(np.var(weights, axis=1)))
+    print("Number of Zero Weights:", np.sum(np.sum(weights, axis=1)==0))
+    print("Std of Weights:". np.mean(np.var(weights, axis=1)))
     modified_alpha = np.ceil((k+1)*(1-alpha))/k
 
     lb_cols, ub_cols = [], []
