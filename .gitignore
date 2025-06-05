@@ -6,3 +6,4 @@ notebooks/snp500/*
 simulation_notebooks/*
 checkpoints/simulation/*
 checkpoints/snp500/*
+environment_setup/requirements_linux.txt
