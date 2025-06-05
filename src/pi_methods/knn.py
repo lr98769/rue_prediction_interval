@@ -3,12 +3,13 @@ from scipy.spatial import KDTree
 
 def knn_prediction_interval(
     df_val, df_test, scaler, predictors, pred_cols, pred_label, regressor_label, ue_col, 
-    seed, alpha=0.05):
+    seed, alpha=0.05, k=None):
     pi_label = "_knn"
     df_val, df_test = df_val.copy(), df_test.copy()
 
     # Set K = sqrt of size of validation set
-    k = max(round(np.sqrt(len(df_val))), 80)
+    if k is None:
+        k = max(round(np.sqrt(len(df_val))), 80)
 
     # Get reconstruction errors
     reconstruction_cols = [col+"_reconstruction_"+regressor_label for col in predictors]
@@ -33,7 +34,7 @@ def knn_prediction_interval(
         neighbour_pe = val_pe[ind]
 
         # PI = 0.95 Percentile of neigbouring errors
-        pi = np.quantile(neighbour_pe, np.ceil((k+1)*(1-alpha))/k, method='higher')
+        pi = np.quantile(neighbour_pe, min(np.ceil((k+1)*(1-alpha))/k, 1), method='higher')
         
         # Get Upper and Lower Bound
         pi_col = col+"_"+ue_col+pi_label
