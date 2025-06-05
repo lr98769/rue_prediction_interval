@@ -10,3 +10,5 @@ environment_setup/requirements_linux.txt
 processed_data/mimic/*
 processed_data/physionet/*
 processed_data/snp500/*
+notebooks/.ipynb_checkpoints/*
+notebooks/mimic/mimic_training_wo_outliers.ipynb
