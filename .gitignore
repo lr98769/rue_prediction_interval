@@ -7,3 +7,6 @@ simulation_notebooks/*
 checkpoints/simulation/*
 checkpoints/snp500/*
 environment_setup/requirements_linux.txt
+processed_data/mimic/*
+processed_data/physionet/*
+processed_data/snp500/*
