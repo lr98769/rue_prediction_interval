@@ -8,7 +8,7 @@ def knn_prediction_interval(
     df_val, df_test = df_val.copy(), df_test.copy()
 
     # Set K = sqrt of size of validation set
-    k = max(round(np.sqrt(len(df_val))), 50)
+    k = max(round(np.sqrt(len(df_val))), 80)
 
     # Get reconstruction errors
     reconstruction_cols = [col+"_reconstruction_"+regressor_label for col in predictors]

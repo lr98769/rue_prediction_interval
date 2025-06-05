@@ -9,13 +9,16 @@ def plot_predictions_with_pi_across_methods(
     df_dict, pi_dict, 
     fp_cur_evaluation_folder, record,
     num_cols = 5, display_feature="ABPsys (mmHg)", regressor_label="t+3",
-    dpi=300, save_fig=False, ylim=None, record_col="record_id",
-    time_col="time", pi_order=None
+    dpi=300, save_fig=False, ylim=None, xlim=None, record_col="record_id",
+    time_col="time", pi_order=None, xlabel=None, ylabel=None
     ):
     fp_fig_folder = join(fp_cur_evaluation_folder, "pi_line_graphs")
     create_folder(fp_fig_folder)
+    if pi_order is None:
+        pi_order = pi_dict.keys()
     
-    num_methods = len(pi_dict)
+    num_methods = len(pi_order)
+    num_cols = min(num_cols, num_methods)
     num_rows = ceil(num_methods/num_cols)
     
     # Plot for all methods
@@ -25,9 +28,6 @@ def plot_predictions_with_pi_across_methods(
     )
     if num_rows > 1:
         axes = axes.flatten()
-        
-    if pi_order is None:
-        pi_order = pi_dict.keys()
         
     # Plots in multiples of three
     for i, pi_name in enumerate(pi_order):
@@ -70,12 +70,20 @@ def plot_predictions_with_pi_across_methods(
                 color='red', alpha=0.3, linewidth=0
             )  
             if i%num_cols==0:
-                ax.set_ylabel(feature)
+                if ylabel is None:
+                    ax.set_ylabel(feature)
+                else:
+                    ax.set_ylabel(ylabel)
             ax.set_title(pi_name)
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
             if ylim is not None:
                 ax.set_ylim(*ylim)
+            if xlim is not None:
+                ax.set_xlim(*xlim)
+            if xlabel is not None:
+                ax.set_xlabel(xlabel)
+                
     plt.tight_layout()
     if save_fig:
         plt.savefig(join(fp_fig_folder, f"pi_comparison_across_methods_{display_feature}_{regressor_label}.jpg"), bbox_inches="tight")

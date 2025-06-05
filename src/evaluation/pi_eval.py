@@ -5,6 +5,11 @@ from IPython.display import display
 from src.df_display.highlight_df import highlight_first_n_second_lowest, highlight_first_n_second_highest
 from src.evaluation.consolidate import get_mean_of_all_seed_csvs
 
+alpha = 0.05
+rho = 1
+beta = 1000
+eta = 50
+
 def calculate_picp_for_a_feature(actual, lb, ub):
     # PICP (Prediction interval coverage probability)
     # - The percentage of points within the prediction interval; The higher the better. 
@@ -42,7 +47,6 @@ def calculate_pinafd_for_a_feature(actual, lb, ub):
     
 def calculate_cp_for_a_feature(actual, lb, ub):
     picp = calculate_picp_for_a_feature(actual, lb, ub)
-    alpha = 0.05
     delta = alpha/50
     cp = (1-alpha+delta-picp)**2
     return cp
@@ -52,10 +56,16 @@ def calculate_cwfdc_for_a_feature(actual, lb, ub):
     pinaw = calculate_pinaw_for_a_feature(actual, lb, ub)
     pinafd = calculate_pinafd_for_a_feature(actual, lb, ub)
     cp = calculate_cp_for_a_feature(actual, lb, ub)
-    rho = 1
-    beta = 1000
     cwfdc = pinaw + rho*pinafd + beta * cp
     return cwfdc
+
+def calculate_cwc_for_a_feature(actual, lb, ub):
+    pinaw = calculate_pinaw_for_a_feature(actual, lb, ub)
+    picp  = calculate_picp_for_a_feature(actual, lb, ub)
+    gamma = int(picp>1-alpha)
+    mu = (1-alpha)
+    cwc = pinaw*(1+gamma*np.exp(-eta*(picp-mu)))
+    return cwc
 
 def aggregate_metrics_across_feats(df_info, pi_info, time_label, metric_func):
     total_metric = 0
@@ -90,6 +100,8 @@ def get_pi_performance_table(df_dict, pi_dict, minmax=False):
             pinafd = aggregate_metrics_across_feats(df_info, pi_info, time_label, metric_func=calculate_pinafd_for_a_feature)
             cp = aggregate_metrics_across_feats(df_info, pi_info, time_label, metric_func=calculate_cp_for_a_feature)
             cwfdc = aggregate_metrics_across_feats(df_info, pi_info, time_label, metric_func=calculate_cwfdc_for_a_feature)
+            cwc = aggregate_metrics_across_feats(df_info, pi_info, time_label, metric_func=calculate_cwc_for_a_feature)
+            
             output_df_list.append({
                 "Time Horizon":time_label,
                 "Method":pi_label,
@@ -97,7 +109,8 @@ def get_pi_performance_table(df_dict, pi_dict, minmax=False):
                 "PINAW":pinaw,
                 "PINAFD":pinafd,
                 "CovP":cp,
-                "CWFDC":cwfdc
+                "CWFDC":cwfdc,
+                "CWC":cwc,
             })
     output_df = pd.DataFrame(output_df_list)
     output_df = output_df.set_index(["Time Horizon", "Method"])
@@ -107,7 +120,7 @@ def get_pi_performance_table(df_dict, pi_dict, minmax=False):
     return output_df
 
 def display_pi_perf(
-    pi_perf_df, highest_cols=["PICP"], lowest_cols=["PINAW", "PINAFD", "CovP", "CWFDC", "AvgP"], consolidated=False):
+    pi_perf_df, highest_cols=["PICP"], lowest_cols=["PINAW", "PINAFD", "CovP", "CWFDC", "AvgP", "CWC"], consolidated=False):
     pi_perf_df = pi_perf_df.copy()
     highest_cols = [col for col in highest_cols if col in pi_perf_df.columns]
     lowest_cols = [col for col in lowest_cols if col in pi_perf_df.columns]

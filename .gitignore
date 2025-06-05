@@ -2,3 +2,7 @@ notebooks/reference_code/*
 notebooks/overnight_code/*
 checkpoints/mimic/pi_predictions/*/df_dict.joblib
 *.pyc
+notebooks/snp500/*
+simulation_notebooks/*
+checkpoints/simulation/*
+checkpoints/snp500/*

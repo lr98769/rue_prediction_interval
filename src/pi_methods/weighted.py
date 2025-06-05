@@ -21,7 +21,7 @@ def weighted_prediction_interval(
     # Set K = sqrt of size of validation set
     n_val = len(df_val)
     n_feat = len(predictors)
-    k = round(np.sqrt(n_val))
+    k = max(round(np.sqrt(n_val)), 80)
 
     # Get reconstruction errors
     reconstruction_cols = [col+"_reconstruction"+"_"+regressor_label for col in predictors]
@@ -44,7 +44,7 @@ def weighted_prediction_interval(
     dist = mahalanobis_dist/np.sqrt(n_feat) # already sorted by distance (nearest first; ascending order of distance)
     weights = np.exp(-np.square(dist)/(2*sigma**2)) # descending order of weights
     print("Number of Zero Weights:", np.sum(np.sum(weights, axis=1)==0))
-    print("Std of Weights:". np.mean(np.var(weights, axis=1)))
+    print("Std of Weights:", np.mean(np.var(weights, axis=1)))
     modified_alpha = np.ceil((k+1)*(1-alpha))/k
 
     lb_cols, ub_cols = [], []
